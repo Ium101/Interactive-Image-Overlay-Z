@@ -1,5 +1,5 @@
 <p align="center">
-<img width="1196" height="828" alt="Captura de tela 2025-11-21 161120" src="https://github.com/user-attachments/assets/39ef727a-b790-4333-bbe7-c767fe9526bb" />
+<img width="1177" height="807" alt="Screenshot" src="https://github.com/user-attachments/assets/4bfce204-4fb0-4728-ad05-bdbee8b942bf" />
 </p>
 
 # Image Overlay Z

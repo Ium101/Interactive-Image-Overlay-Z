@@ -15,6 +15,9 @@ LANGUAGES = {
         "position": "Position:",
         "size": "Size (%):",
         "opacity": "Opacity (%):",
+        "padding": "Padding:",
+        "top_bottom_padding": "Top/Bottom (px):",
+        "left_right_padding": "Left/Right (px):",
         "color": "Color:",
         "auto_tone": "Auto-adjust tone",
         "no_color": "Original Color",
@@ -29,8 +32,13 @@ LANGUAGES = {
         "success": "All images processed successfully!",
         "saved": "Saved:",
         "top_left": "Top Left",
+        "top_center": "Top Center",
         "top_right": "Top Right",
+        "middle_left": "Middle Left",
+        "center": "Center",
+        "middle_right": "Middle Right",
         "bottom_left": "Bottom Left",
+        "bottom_center": "Bottom Center",
         "bottom_right": "Bottom Right",
         "no_images": "No images selected!",
         "no_watermark": "Please select a watermark first!",
@@ -48,6 +56,9 @@ LANGUAGES = {
         "position": "Posição:",
         "size": "Tamanho (%):",
         "opacity": "Opacidade (%):",
+        "padding": "Preenchimento:",
+        "top_bottom_padding": "Topo/Base (px):",
+        "left_right_padding": "Esq/Dir (px):",
         "color": "Cor:",
         "auto_tone": "Ajustar tom automaticamente",
         "no_color": "Cor Original",
@@ -62,8 +73,13 @@ LANGUAGES = {
         "success": "Todas as imagens processadas com sucesso!",
         "saved": "Salvo:",
         "top_left": "Superior Esquerdo",
+        "top_center": "Topo Centro",
         "top_right": "Superior Direito",
+        "middle_left": "Meio Esquerdo",
+        "center": "Centro",
+        "middle_right": "Meio Direito",
         "bottom_left": "Inferior Esquerdo",
+        "bottom_center": "Base Centro",
         "bottom_right": "Inferior Direito",
         "no_images": "Nenhuma imagem selecionada!",
         "no_watermark": "Por favor, selecione uma marca d'água primeiro!",
@@ -97,104 +113,147 @@ class InteractiveOverlayApp:
         self.root.after(100, self.start_selection_process)
         
     def setup_ui(self):
-        # Top controls
-        control_frame = ttk.Frame(self.root, padding="10")
-        control_frame.pack(fill=tk.X)
+        # REMOVE ALL PADDING FROM ROOT WINDOW
+        self.root.config(padx=0, pady=0)
+        
+        # Top controls - MINIMAL padding
+        control_frame = ttk.Frame(self.root, padding="2")
+        control_frame.pack(fill=tk.X, padx=0, pady=0)
         
         self.image_label = ttk.Label(control_frame, text="", font=("Arial", 10, "bold"))
-        self.image_label.pack(side=tk.LEFT, padx=20)
+        self.image_label.pack(side=tk.LEFT, padx=5)
         
-        # Main content area
-        content_frame = ttk.Frame(self.root)
-        content_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+        # Main content area with ABSOLUTE ZERO padding/margin on ALL SIDES
+        content_frame = ttk.Frame(self.root, padding="0")
+        content_frame.pack(fill=tk.BOTH, expand=True, padx=0, pady=0)
         
-        # Left side - Preview (NO BLACK BORDERS)
-        preview_frame = ttk.LabelFrame(content_frame, text=self.L["preview"], padding="10", relief=tk.FLAT, borderwidth=0)
-        preview_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=(0, 5))
+        # Left side - Preview (ZERO PADDING, ZERO MARGIN)
+        preview_frame = ttk.Frame(content_frame, padding="0", relief=tk.FLAT, borderwidth=0)
+        preview_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=0, pady=0)
         
         self.canvas = tk.Canvas(preview_frame, bg='#2b2b2b', highlightthickness=0, relief=tk.FLAT, bd=0)
-        self.canvas.pack(fill=tk.BOTH, expand=True)
+        self.canvas.pack(fill=tk.BOTH, expand=True, padx=0, pady=0)
         
-        # Right side - Controls (NO BLACK BORDERS)
-        settings_frame = ttk.LabelFrame(content_frame, text=self.L["settings"], padding="10", relief=tk.FLAT, borderwidth=0)
-        settings_frame.pack(side=tk.RIGHT, fill=tk.Y, padx=(5, 0))
+        # Right side - Controls (NO BLACK BORDERS, COMPACT, BIGGER TEXT)
+        settings_frame = ttk.Frame(content_frame, padding="8", relief=tk.FLAT, borderwidth=0)
+        settings_frame.pack(side=tk.RIGHT, fill=tk.Y, padx=0, pady=0)
         settings_frame.config(width=300)
         
+        # Settings label
+        ttk.Label(settings_frame, text=self.L["settings"], font=("Arial", 11, "bold")).pack(anchor=tk.W, pady=(0, 5))
+        
         # Position
-        ttk.Label(settings_frame, text=self.L["position"], font=("Arial", 10, "bold")).pack(anchor=tk.W, pady=(0, 5))
+        ttk.Label(settings_frame, text=self.L["position"], font=("Arial", 10, "bold")).pack(anchor=tk.W, pady=(0, 3))
         self.position_var = tk.StringVar(value="bottom_right")
+        
+        # 3x3 grid layout for positions (more compact)
+        position_grid = ttk.Frame(settings_frame)
+        position_grid.pack(anchor=tk.W, padx=5, pady=3)
+        
         positions = [
-            ("top_left", self.L["top_left"]),
-            ("top_right", self.L["top_right"]),
-            ("bottom_left", self.L["bottom_left"]),
-            ("bottom_right", self.L["bottom_right"])
+            ("top_left", self.L["top_left"], 0, 0),
+            ("top_center", self.L["top_center"], 0, 1),
+            ("top_right", self.L["top_right"], 0, 2),
+            ("middle_left", self.L["middle_left"], 1, 0),
+            ("center", self.L["center"], 1, 1),
+            ("middle_right", self.L["middle_right"], 1, 2),
+            ("bottom_left", self.L["bottom_left"], 2, 0),
+            ("bottom_center", self.L["bottom_center"], 2, 1),
+            ("bottom_right", self.L["bottom_right"], 2, 2)
         ]
-        for val, text in positions:
-            ttk.Radiobutton(settings_frame, text=text, variable=self.position_var, 
-                          value=val, command=self.update_preview).pack(anchor=tk.W, padx=10)
+        for val, text, row, col in positions:
+            ttk.Radiobutton(position_grid, text=text, variable=self.position_var, 
+                          value=val, command=self.update_preview).grid(row=row, column=col, sticky=tk.W, padx=2, pady=1)
         
         # Size
-        ttk.Separator(settings_frame, orient='horizontal').pack(fill=tk.X, pady=10)
-        ttk.Label(settings_frame, text=self.L["size"], font=("Arial", 10, "bold")).pack(anchor=tk.W, pady=(0, 5))
+        ttk.Separator(settings_frame, orient='horizontal').pack(fill=tk.X, pady=6)
+        ttk.Label(settings_frame, text=self.L["size"], font=("Arial", 10, "bold")).pack(anchor=tk.W, pady=(0, 3))
         self.size_var = tk.IntVar(value=10)
         size_frame = ttk.Frame(settings_frame)
-        size_frame.pack(fill=tk.X, padx=10)
+        size_frame.pack(fill=tk.X, padx=5)
         ttk.Scale(size_frame, from_=1, to=50, variable=self.size_var, 
                  orient=tk.HORIZONTAL, command=lambda x: self.update_preview()).pack(side=tk.LEFT, fill=tk.X, expand=True)
-        self.size_label = ttk.Label(size_frame, text="10%", width=5)
+        self.size_label = ttk.Label(size_frame, text="10%", width=6, font=("Arial", 9))
         self.size_label.pack(side=tk.RIGHT, padx=(5, 0))
         
         # Opacity
-        ttk.Separator(settings_frame, orient='horizontal').pack(fill=tk.X, pady=10)
-        ttk.Label(settings_frame, text=self.L["opacity"], font=("Arial", 10, "bold")).pack(anchor=tk.W, pady=(0, 5))
+        ttk.Separator(settings_frame, orient='horizontal').pack(fill=tk.X, pady=6)
+        ttk.Label(settings_frame, text=self.L["opacity"], font=("Arial", 10, "bold")).pack(anchor=tk.W, pady=(0, 3))
         self.opacity_var = tk.IntVar(value=100)
         opacity_frame = ttk.Frame(settings_frame)
-        opacity_frame.pack(fill=tk.X, padx=10)
+        opacity_frame.pack(fill=tk.X, padx=5)
         ttk.Scale(opacity_frame, from_=1, to=100, variable=self.opacity_var, 
                  orient=tk.HORIZONTAL, command=lambda x: self.update_preview()).pack(side=tk.LEFT, fill=tk.X, expand=True)
-        self.opacity_label = ttk.Label(opacity_frame, text="100%", width=5)
+        self.opacity_label = ttk.Label(opacity_frame, text="100%", width=6, font=("Arial", 9))
         self.opacity_label.pack(side=tk.RIGHT, padx=(5, 0))
         
+        # Padding
+        ttk.Separator(settings_frame, orient='horizontal').pack(fill=tk.X, pady=6)
+        ttk.Label(settings_frame, text=self.L["padding"], font=("Arial", 10, "bold")).pack(anchor=tk.W, pady=(0, 3))
+        
+        ttk.Label(settings_frame, text=self.L["top_bottom_padding"], font=("Arial", 9)).pack(anchor=tk.W, padx=5, pady=(3, 0))
+        self.top_bottom_padding_var = tk.IntVar(value=0)
+        tb_frame = ttk.Frame(settings_frame)
+        tb_frame.pack(fill=tk.X, padx=5)
+        ttk.Scale(tb_frame, from_=0, to=100, variable=self.top_bottom_padding_var, 
+                 orient=tk.HORIZONTAL, command=lambda x: self.update_preview()).pack(side=tk.LEFT, fill=tk.X, expand=True)
+        self.top_bottom_padding_label = ttk.Label(tb_frame, text="0px", width=6, font=("Arial", 9))
+        self.top_bottom_padding_label.pack(side=tk.RIGHT, padx=(5, 0))
+        
+        ttk.Label(settings_frame, text=self.L["left_right_padding"], font=("Arial", 9)).pack(anchor=tk.W, padx=5, pady=(3, 0))
+        self.left_right_padding_var = tk.IntVar(value=0)
+        lr_frame = ttk.Frame(settings_frame)
+        lr_frame.pack(fill=tk.X, padx=5, pady=(0, 3))
+        ttk.Scale(lr_frame, from_=0, to=100, variable=self.left_right_padding_var, 
+                 orient=tk.HORIZONTAL, command=lambda x: self.update_preview()).pack(side=tk.LEFT, fill=tk.X, expand=True)
+        self.left_right_padding_label = ttk.Label(lr_frame, text="0px", width=6, font=("Arial", 9))
+        self.left_right_padding_label.pack(side=tk.RIGHT, padx=(5, 0))
+        
         # Color
-        ttk.Separator(settings_frame, orient='horizontal').pack(fill=tk.X, pady=10)
-        ttk.Label(settings_frame, text=self.L["color"], font=("Arial", 10, "bold")).pack(anchor=tk.W, pady=(0, 5))
+        ttk.Separator(settings_frame, orient='horizontal').pack(fill=tk.X, pady=6)
+        ttk.Label(settings_frame, text=self.L["color"], font=("Arial", 10, "bold")).pack(anchor=tk.W, pady=(0, 3))
         self.color_mode = tk.StringVar(value="auto_tone")
         
         ttk.Radiobutton(settings_frame, text=self.L["auto_tone"], variable=self.color_mode, 
-                       value="auto_tone", command=self.update_preview).pack(anchor=tk.W, padx=10)
+                       value="auto_tone", command=self.update_preview).pack(anchor=tk.W, padx=5, pady=2)
         ttk.Radiobutton(settings_frame, text=self.L["no_color"], variable=self.color_mode, 
-                       value="original", command=self.update_preview).pack(anchor=tk.W, padx=10)
+                       value="original", command=self.update_preview).pack(anchor=tk.W, padx=5, pady=2)
         
         color_frame = ttk.Frame(settings_frame)
-        color_frame.pack(fill=tk.X, padx=10)
+        color_frame.pack(fill=tk.X, padx=5, pady=2)
         ttk.Radiobutton(color_frame, text=self.L["choose_color"], variable=self.color_mode, 
                        value="custom", command=self.update_preview).pack(side=tk.LEFT)
-        self.color_button = tk.Button(color_frame, text="■", font=("Arial", 16), 
-                                      command=self.choose_color, width=3, bg="white")
+        self.color_button = tk.Button(color_frame, text="■", font=("Arial", 14), 
+                                      command=self.choose_color, width=2, bg="white")
         self.color_button.pack(side=tk.LEFT, padx=5)
         self.selected_color = (255, 255, 255)
         
-        # Action buttons
-        ttk.Separator(settings_frame, orient='horizontal').pack(fill=tk.X, pady=20)
+        # Action buttons (LARGER BUTTONS, CLOSER TOGETHER)
+        ttk.Separator(settings_frame, orient='horizontal').pack(fill=tk.X, pady=10)
         
-        # Navigation buttons frame
+        # Navigation buttons frame - LARGER BUTTONS WITH MINIMAL SPACING
         nav_frame = ttk.Frame(settings_frame)
-        nav_frame.pack(fill=tk.X, pady=5)
+        nav_frame.pack(fill=tk.X, pady=2)
+        
+        # Style for larger buttons
+        style = ttk.Style()
+        style.configure("Large.TButton", font=("Arial", 10), padding=8)
+        style.configure("Accent.TButton", font=("Arial", 11, "bold"), padding=10)
         
         ttk.Button(nav_frame, text=self.L["previous"], 
-                  command=self.previous_image, width=15).pack(side=tk.LEFT, padx=(0, 5))
+                  command=self.previous_image, style="Large.TButton").pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 1))
         ttk.Button(nav_frame, text=self.L["apply"], 
-                  command=self.apply_current, width=15).pack(side=tk.RIGHT, padx=(5, 0))
+                  command=self.apply_current, style="Large.TButton").pack(side=tk.RIGHT, fill=tk.X, expand=True, padx=(1, 0))
         
         ttk.Button(settings_frame, text=self.L["skip"], 
-                  command=self.skip_current).pack(fill=tk.X, pady=5)
+                  command=self.skip_current, style="Large.TButton").pack(fill=tk.X, pady=2)
         ttk.Button(settings_frame, text=self.L["process_all"], 
-                  command=self.process_all, style="Accent.TButton").pack(fill=tk.X, pady=15)
+                  command=self.process_all, style="Accent.TButton").pack(fill=tk.X, pady=10)
         
         # Credits with translation
         credits = ttk.Label(settings_frame, text=self.L["credits"] + "\nGitHub", 
                           font=("Arial", 8), justify=tk.CENTER)
-        credits.pack(side=tk.BOTTOM, pady=10)
+        credits.pack(side=tk.BOTTOM, pady=5)
         
         # Style
         style = ttk.Style()
@@ -289,6 +348,8 @@ class InteractiveOverlayApp:
             self.position_var.set(s['position'])
             self.size_var.set(s['size'])
             self.opacity_var.set(s['opacity'])
+            self.top_bottom_padding_var.set(s.get('top_bottom_padding', 0))
+            self.left_right_padding_var.set(s.get('left_right_padding', 0))
             self.color_mode.set(s['color_mode'])
             if s['color']:
                 self.selected_color = s['color']
@@ -298,6 +359,8 @@ class InteractiveOverlayApp:
             self.position_var.set("bottom_right")
             self.size_var.set(10)
             self.opacity_var.set(100)
+            self.top_bottom_padding_var.set(0)
+            self.left_right_padding_var.set(0)
             self.color_mode.set("auto_tone")
             self.selected_color = (255, 255, 255)
             self.color_button.config(bg="white")
@@ -311,6 +374,8 @@ class InteractiveOverlayApp:
         # Update labels
         self.size_label.config(text=f"{self.size_var.get()}%")
         self.opacity_label.config(text=f"{self.opacity_var.get()}%")
+        self.top_bottom_padding_label.config(text=f"{self.top_bottom_padding_var.get()}px")
+        self.left_right_padding_label.config(text=f"{self.left_right_padding_var.get()}px")
         
         # Create preview
         base = self.base_original.copy()
@@ -325,16 +390,30 @@ class InteractiveOverlayApp:
         new_w = int(new_h * (overlay_w / overlay_h))
         overlay_resized = overlay.resize((new_w, new_h), Image.Resampling.LANCZOS)
         
-        # Calculate position
+        # Get padding values
+        tb_padding = self.top_bottom_padding_var.get()
+        lr_padding = self.left_right_padding_var.get()
+        
+        # Calculate position with padding (9 positions)
         position = self.position_var.get()
         if position == "top_left":
-            pos_x, pos_y = 0, 0
+            pos_x, pos_y = lr_padding, tb_padding
+        elif position == "top_center":
+            pos_x, pos_y = (base_w - new_w) // 2, tb_padding
         elif position == "top_right":
-            pos_x, pos_y = base_w - new_w, 0
+            pos_x, pos_y = base_w - new_w - lr_padding, tb_padding
+        elif position == "middle_left":
+            pos_x, pos_y = lr_padding, (base_h - new_h) // 2
+        elif position == "center":
+            pos_x, pos_y = (base_w - new_w) // 2, (base_h - new_h) // 2
+        elif position == "middle_right":
+            pos_x, pos_y = base_w - new_w - lr_padding, (base_h - new_h) // 2
         elif position == "bottom_left":
-            pos_x, pos_y = 0, base_h - new_h
+            pos_x, pos_y = lr_padding, base_h - new_h - tb_padding
+        elif position == "bottom_center":
+            pos_x, pos_y = (base_w - new_w) // 2, base_h - new_h - tb_padding
         else:  # bottom_right
-            pos_x, pos_y = base_w - new_w, base_h - new_h
+            pos_x, pos_y = base_w - new_w - lr_padding, base_h - new_h - tb_padding
         
         # Apply color mode
         color_mode = self.color_mode.get()
@@ -433,6 +512,8 @@ class InteractiveOverlayApp:
             'position': self.position_var.get(),
             'size': self.size_var.get(),
             'opacity': self.opacity_var.get(),
+            'top_bottom_padding': self.top_bottom_padding_var.get(),
+            'left_right_padding': self.left_right_padding_var.get(),
             'color_mode': self.color_mode.get(),
             'color': self.selected_color if self.color_mode.get() == "custom" else None
         }
@@ -499,16 +580,29 @@ class InteractiveOverlayApp:
                 new_w = int(new_h * (overlay_w / overlay_h))
                 overlay_resized = overlay.resize((new_w, new_h), Image.Resampling.LANCZOS)
                 
-                # Position
+                # Position with padding
                 position = s['position']
+                tb_padding = s.get('top_bottom_padding', 0)
+                lr_padding = s.get('left_right_padding', 0)
+                
                 if position == "top_left":
-                    pos_x, pos_y = 0, 0
+                    pos_x, pos_y = lr_padding, tb_padding
+                elif position == "top_center":
+                    pos_x, pos_y = (base_w - new_w) // 2, tb_padding
                 elif position == "top_right":
-                    pos_x, pos_y = base_w - new_w, 0
+                    pos_x, pos_y = base_w - new_w - lr_padding, tb_padding
+                elif position == "middle_left":
+                    pos_x, pos_y = lr_padding, (base_h - new_h) // 2
+                elif position == "center":
+                    pos_x, pos_y = (base_w - new_w) // 2, (base_h - new_h) // 2
+                elif position == "middle_right":
+                    pos_x, pos_y = base_w - new_w - lr_padding, (base_h - new_h) // 2
                 elif position == "bottom_left":
-                    pos_x, pos_y = 0, base_h - new_h
-                else:
-                    pos_x, pos_y = base_w - new_w, base_h - new_h
+                    pos_x, pos_y = lr_padding, base_h - new_h - tb_padding
+                elif position == "bottom_center":
+                    pos_x, pos_y = (base_w - new_w) // 2, base_h - new_h - tb_padding
+                else:  # bottom_right
+                    pos_x, pos_y = base_w - new_w - lr_padding, base_h - new_h - tb_padding
                 
                 # Apply color mode
                 color_mode = s['color_mode']
@@ -558,16 +652,19 @@ def show_language_selection():
     root.geometry("600x500")
     root.resizable(False, False)
     root.configure(bg='#f0f0f0')
+    
+    # REMOVE ALL PADDING FROM ROOT WINDOW
+    root.config(padx=0, pady=0)
 
     root.grid_columnconfigure(0, weight=1)
     root.grid_rowconfigure(0, weight=1)
     
-    # Main frame with shadow effect
-    main_frame = tk.Frame(root, bg='#ffffff', relief=tk.RAISED, borderwidth=2)
-    main_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S), padx=20, pady=20)
+    # Main frame with NO padding - fill entire window
+    main_frame = tk.Frame(root, bg='#ffffff', relief=tk.FLAT, borderwidth=0)
+    main_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S), padx=0, pady=0)
     main_frame.grid_columnconfigure(0, weight=1)
     
-    # Header section with gradient-like colored background
+    # Header section with gradient-like colored background - FULL WIDTH
     header_frame = tk.Frame(main_frame, bg='#4a90e2', height=140)
     header_frame.grid(row=0, column=0, sticky=(tk.W, tk.E))
     header_frame.grid_columnconfigure(0, weight=1)
@@ -621,14 +718,15 @@ def show_language_selection():
         btn.bind("<Leave>", on_leave)
         
         return btn
+    
     def start_with_language(lang):
         root.destroy()
         app = InteractiveOverlayApp(lang)
         app.run()
     
-    create_button(content_frame, "🇬🇧🇺🇸 Continue in English", 
+    create_button(content_frame, "EN/US", 
                  lambda: start_with_language("en"), 1)
-    create_button(content_frame, "🇵🇹🇧🇷 Continuar em Português", 
+    create_button(content_frame, "PT/BR", 
                  lambda: start_with_language("pt"), 2)
     
     # Separator
