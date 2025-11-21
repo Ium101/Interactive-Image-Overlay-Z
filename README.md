@@ -30,7 +30,8 @@ A user-friendly graphical application that adds an image overlay over multiple i
 -   **Batch Processing:** Apply an overlay to hundreds of images in a single operation.
 -   **Fully Customizable:**
     -   Adjust the overlay **size** (in pixels or percentage).
-    -   Choose the exact **position** (top-left, bottom-right, etc.).
+    -   Choose the exact **position** (top-left, bottom-right, center, etc.).
+    -   Set the padding to the left/right or top/bottom.
     -   Set the **opacity** level for a more subtle effect.
 -   **Multiple Format Support:** Works with `PNG`, `JPG/JPEG`, and `BMP` files.
 
@@ -78,7 +79,8 @@ Uma aplicação gráfica amigável que adiciona uma sobreposição de imagem sob
 -   **Processamento em Lote:** Aplique uma sobreposição em centenas de imagens em uma única operação.
 -   **Totalmente Personalizável:**
     -   Ajuste o **tamanho** da sobreposição (em pixels ou porcentagem).
-    -   Escolha a **posição** exata (canto superior esquerdo, inferior direito, etc.).
+    -   Escolha a **posição** exata (canto superior esquerdo, inferior direito, centro, etc.).
+    -   Seleciona o espaçamento para a esquerda/direita ou cima/baixo.
     -   Defina o nível de **opacidade** para um efeito mais sutil.
 -   **Suporte a Múltiplos Formatos:** Compatível com arquivos `PNG`, `JPG/JPEG` e `BMP`.
 
