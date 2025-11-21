@@ -1,8 +1,5 @@
 <p align="center">
-  <img width="498" height="427" src="https://github.com/user-attachments/assets/285bbdb3-84d5-47f6-b2ba-17c94abadda1" alt="Demonstração do Aplicativo">
-</p>
-<p align="center">
-  <img width="595" height="208" src="https://github.com/user-attachments/assets/bd0e5540-2cbb-4f34-8007-ae34d9f8b4ae" alt="Exemplo de Uso">
+<img width="1196" height="828" alt="Captura de tela 2025-11-21 161120" src="https://github.com/user-attachments/assets/39ef727a-b790-4333-bbe7-c767fe9526bb" />
 </p>
 
 # Image Overlay Z
