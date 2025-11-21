@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Overlay Web App</title>
+    <title>Image Overlay - Web Version</title>
     <style>
         * {
             margin: 0;
@@ -217,6 +217,44 @@
             width: 20px;
             height: 20px;
             cursor: pointer;
+        }
+
+        .position-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .position-btn {
+            padding: 12px 8px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85em;
+            font-weight: 500;
+            color: #555;
+            transition: all 0.2s ease;
+        }
+
+        .position-btn:hover {
+            border-color: #667eea;
+            color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.2);
+        }
+
+        .position-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+            box-shadow: 0 6px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .position-btn.active:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.5);
         }
 
         .process-btn {
@@ -445,7 +483,7 @@
 </head>
 <body>
     <div class="container">
-        <h1 id="mainTitle">Image Overlay</h1>
+        <h1 id="mainTitle">Image Overlay Z - Web Version</h1>
         <p class="subtitle" id="subtitle">Add watermarks to your images with ease</p>
 
         <div class="lang-selection">
@@ -489,18 +527,33 @@
                 
                 <div class="options-grid">
                     <div class="option-group">
-                        <label for="position" id="positionLabel">Position</label>
-                        <select id="position">
-                            <option value="bottom_left">Bottom Left</option>                            
-                            <option value="bottom_right">Bottom Right</option>
-                            <option value="top_right">Top Right</option>
-                            <option value="top_left">Top Left</option>
-                        </select>
+                        <label id="positionLabel">Position</label>
+                        <div class="position-grid" id="positionGrid">
+                            <button type="button" class="position-btn" data-position="top_left" id="pos_top_left">Top Left</button>
+                            <button type="button" class="position-btn" data-position="top_center" id="pos_top_center">Top Center</button>
+                            <button type="button" class="position-btn" data-position="top_right" id="pos_top_right">Top Right</button>
+                            <button type="button" class="position-btn" data-position="middle_left" id="pos_middle_left">Middle Left</button>
+                            <button type="button" class="position-btn" data-position="center" id="pos_center">Center</button>
+                            <button type="button" class="position-btn" data-position="middle_right" id="pos_middle_right">Middle Right</button>
+                            <button type="button" class="position-btn" data-position="bottom_left" id="pos_bottom_left">Bottom Left</button>
+                            <button type="button" class="position-btn" data-position="bottom_center" id="pos_bottom_center">Bottom Center</button>
+                            <button type="button" class="position-btn active" data-position="bottom_right" id="pos_bottom_right">Bottom Right</button>
+                        </div>
                     </div>
 
                     <div class="option-group">
                         <label for="height" id="heightLabel">Height (px or %)</label>
                         <input type="text" id="height" placeholder="e.g., 50 or 10%">
+                    </div>
+
+                    <div class="option-group">
+                        <label for="leftRightPadding" id="leftRightPaddingLabel">Left/Right Padding (px):</label>
+                        <input type="number" id="leftRightPadding" min="0" max="500" value="0">
+                    </div>
+
+                    <div class="option-group">
+                        <label for="topBottomPadding" id="topBottomPaddingLabel">Top/Bottom Padding (px):</label>
+                        <input type="number" id="topBottomPadding" min="0" max="500" value="0">
                     </div>
 
                     <div class="option-group">
@@ -545,8 +598,8 @@
         <div id="aboutPage" class="page">
             <div class="about-content">
                 <div class="info-section">
-                    <h2 id="aboutTitle">About Image Overlay</h2>
-                    <p id="aboutText1">Image Overlay is a powerful web-based tool designed to help you add watermarks to your images quickly and efficiently. Whether you're a photographer, designer, or content creator, this tool makes it easy to protect your work and brand your images.</p>
+                    <h2 id="aboutTitle">About Image Overlay Z</h2>
+                    <p id="aboutText1">Image Overlay Z is a powerful web-based tool designed to help you add watermarks to your images quickly and efficiently. Whether you're a photographer, designer, or content creator, this tool makes it easy to protect your work and brand your images.</p>
                     <p id="aboutText2">This application runs entirely in your browser, meaning your images never leave your computer. All processing is done locally, ensuring your privacy and security.</p>
                 </div>
 
@@ -649,7 +702,7 @@
     <script>
         const translations = {
             en: {
-                mainTitle: "Image Overlay",
+                mainTitle: "Image Overlay Z - Web Version",
                 subtitle: "Add watermarks to your images with ease",
                 navEditor: "Editor",
                 navAbout: "About",
@@ -662,6 +715,8 @@
                 positionLabel: "Position",
                 heightLabel: "Height (px or %)",
                 opacityLabel: "Opacity (0-100%)",
+                topBottomPaddingLabel: "Top/Bottom Padding (px):",
+                leftRightPaddingLabel: "Left/Right Padding (px):",
                 colorLabel: "Recolor (optional)",
                 recolorLabel: "Enable color change",
                 autoAdjustLabel: "Auto-adjust contrast based on background",
@@ -669,8 +724,8 @@
                 processing: "Processing: ",
                 done: "Done! Click images to download",
                 error: "Error: ",
-                aboutTitle: "About Image Overlay",
-                aboutText1: "Image Overlay is a powerful web-based tool designed to help you add watermarks to your images quickly and efficiently. Whether you're a photographer, designer, or content creator, this tool makes it easy to protect your work and brand your images.",
+                aboutTitle: "About Image Overlay Z",
+                aboutText1: "Image Overlay Z is a powerful web-based tool designed to help you add watermarks to your images quickly and efficiently. Whether you're a photographer, designer, or content creator, this tool makes it easy to protect your work and brand your images.",
                 aboutText2: "This application runs entirely in your browser, meaning your images never leave your computer. All processing is done locally, ensuring your privacy and security.",
                 featuresTitle: "Features",
                 feature1Title: "Custom Colors",
@@ -701,7 +756,7 @@
                 licenseText: "This tool was created by Ium101 and is available for free use. Built with vanilla JavaScript, HTML5 Canvas API, and lots of ❤️."
             },
             pt: {
-                mainTitle: "Sobreposição de Imagem",
+                mainTitle: "Sobreposição de Imagem Z - Versão Web",
                 subtitle: "Adicione marcas d'água às suas imagens com facilidade",
                 navEditor: "Editor",
                 navAbout: "Sobre",
@@ -714,6 +769,8 @@
                 positionLabel: "Posição",
                 heightLabel: "Altura (px ou %)",
                 opacityLabel: "Opacidade (0-100%)",
+                topBottomPaddingLabel: "Preenchimento Topo/Base (px):",
+                leftRightPaddingLabel: "Preenchimento Esq/Dir (px):",
                 colorLabel: "Recolorir (opcional)",
                 recolorLabel: "Ativar mudança de cor",
                 autoAdjustLabel: "Ajustar contraste automaticamente baseado no fundo",
@@ -721,7 +778,7 @@
                 processing: "Processando: ",
                 done: "Concluído! Clique nas imagens para baixar",
                 error: "Erro: ",
-                aboutTitle: "Sobre o Image Overlay",
+                aboutTitle: "Sobre o Image Overlay Z",
                 aboutText1: "Image Overlay é uma ferramenta web poderosa projetada para ajudá-lo a adicionar marcas d'água às suas imagens de forma rápida e eficiente. Seja você fotógrafo, designer ou criador de conteúdo, esta ferramenta facilita proteger seu trabalho e marcar suas imagens.",
                 aboutText2: "Esta aplicação funciona inteiramente no seu navegador, o que significa que suas imagens nunca saem do seu computador. Todo o processamento é feito localmente, garantindo sua privacidade e segurança.",
                 featuresTitle: "Recursos",
@@ -822,7 +879,143 @@
                 `${count} image${count !== 1 ? 's' : ''} selected` :
                 `${count} imagem${count !== 1 ? 'ns' : ''} selecionada${count !== 1 ? 's' : ''}`;
             document.getElementById('targetFileName').textContent = text;
+            updateLivePreview();
         });
+
+        // Position button handlers
+        document.querySelectorAll('.position-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.position-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                updateLivePreview();
+            });
+        });
+
+        // Update preview on all control changes
+        document.getElementById('height').addEventListener('input', updateLivePreview);
+        document.getElementById('opacity').addEventListener('input', updateLivePreview);
+        document.getElementById('topBottomPadding').addEventListener('input', updateLivePreview);
+        document.getElementById('leftRightPadding').addEventListener('input', updateLivePreview);
+        document.getElementById('color').addEventListener('change', updateLivePreview);
+        document.getElementById('autoAdjust').addEventListener('change', updateLivePreview);
+        document.getElementById('enableRecolor').addEventListener('change', updateLivePreview);
+
+        async function updateLivePreview() {
+            if (!overlayImage || targetImages.length === 0) {
+                document.getElementById('livePreviewSection').style.display = 'none';
+                return;
+            }
+
+            try {
+                const previewCanvas = document.getElementById('livePreviewCanvas');
+                const ctx = previewCanvas.getContext('2d');
+
+                // Load first target image
+                const firstTarget = await new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const img = new Image();
+                        img.onload = () => resolve(img);
+                        img.onerror = reject;
+                        img.src = e.target.result;
+                    };
+                    reader.onerror = reject;
+                    reader.readAsDataURL(targetImages[0]);
+                });
+
+                // Load overlay image
+                const overlayImg = await new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const img = new Image();
+                        img.onload = () => resolve(img);
+                        img.onerror = reject;
+                        img.src = e.target.result;
+                    };
+                    reader.onerror = reject;
+                    reader.readAsDataURL(overlayImage);
+                });
+
+                // Set canvas size
+                previewCanvas.width = firstTarget.width;
+                previewCanvas.height = firstTarget.height;
+
+                // Draw target image
+                ctx.drawImage(firstTarget, 0, 0);
+
+                // Prepare overlay
+                const overlayCanvas = document.createElement('canvas');
+                overlayCanvas.width = overlayImg.width;
+                overlayCanvas.height = overlayImg.height;
+                const overlayCtx = overlayCanvas.getContext('2d');
+                overlayCtx.drawImage(overlayImg, 0, 0);
+
+                // Get settings
+                const heightInput = document.getElementById('height').value;
+                const opacity = parseFloat(document.getElementById('opacity').value) / 100;
+                const topBottomPadding = parseInt(document.getElementById('topBottomPadding').value) || 0;
+                const leftRightPadding = parseInt(document.getElementById('leftRightPadding').value) || 0;
+                const enableRecolor = document.getElementById('enableRecolor').checked;
+                const color = document.getElementById('color').value;
+                const autoAdjust = document.getElementById('autoAdjust').checked;
+                const position = document.querySelector('.position-btn.active').dataset.position;
+
+                // Calculate overlay height
+                let overlayHeight;
+                if (heightInput.includes('%')) {
+                    overlayHeight = Math.round(firstTarget.height * (parseFloat(heightInput) / 100));
+                } else {
+                    overlayHeight = parseInt(heightInput) || 50;
+                }
+                const overlayWidth = (overlayImg.width / overlayImg.height) * overlayHeight;
+
+                // Apply auto-adjust if enabled
+                if (autoAdjust) {
+                    const testCanvas = document.createElement('canvas');
+                    testCanvas.width = overlayCanvas.width;
+                    testCanvas.height = overlayCanvas.height;
+                    const testCtx = testCanvas.getContext('2d');
+                    testCtx.drawImage(overlayCanvas, 0, 0);
+                    
+                    const centerX = Math.floor(firstTarget.width / 2);
+                    const centerY = Math.floor(firstTarget.height / 2);
+                    const brightness = analyzeBrightness(ctx.getImageData(0, 0, firstTarget.width, firstTarget.height), centerX - 50, centerY - 50, 100, 100);
+                    
+                    overlayCanvas.width = overlayImg.width;
+                    overlayCanvas.height = overlayImg.height;
+                    overlayCtx.drawImage(overlayImg, 0, 0);
+                    adjustOverlayContrast(overlayCanvas, brightness);
+                }
+
+                // Apply recolor if enabled
+                if (enableRecolor) {
+                    recolorOverlay(overlayCanvas, color);
+                }
+
+                // Calculate position with padding
+                let pos_x, pos_y;
+                switch (position) {
+                    case 'top_left': pos_x = leftRightPadding; pos_y = topBottomPadding; break;
+                    case 'top_center': pos_x = (firstTarget.width - overlayWidth) / 2; pos_y = topBottomPadding; break;
+                    case 'top_right': pos_x = firstTarget.width - overlayWidth - leftRightPadding; pos_y = topBottomPadding; break;
+                    case 'middle_left': pos_x = leftRightPadding; pos_y = (firstTarget.height - overlayHeight) / 2; break;
+                    case 'center': pos_x = (firstTarget.width - overlayWidth) / 2; pos_y = (firstTarget.height - overlayHeight) / 2; break;
+                    case 'middle_right': pos_x = firstTarget.width - overlayWidth - leftRightPadding; pos_y = (firstTarget.height - overlayHeight) / 2; break;
+                    case 'bottom_left': pos_x = leftRightPadding; pos_y = firstTarget.height - overlayHeight - topBottomPadding; break;
+                    case 'bottom_center': pos_x = (firstTarget.width - overlayWidth) / 2; pos_y = firstTarget.height - overlayHeight - topBottomPadding; break;
+                    case 'bottom_right': pos_x = firstTarget.width - overlayWidth - leftRightPadding; pos_y = firstTarget.height - overlayHeight - topBottomPadding; break;
+                }
+
+                // Draw overlay with opacity
+                ctx.globalAlpha = opacity;
+                ctx.drawImage(overlayCanvas, pos_x, pos_y, overlayWidth, overlayHeight);
+                ctx.globalAlpha = 1;
+
+                document.getElementById('livePreviewSection').style.display = 'block';
+            } catch (error) {
+                console.error('Preview error:', error);
+            }
+        }
 
         function analyzeBrightness(imageData, x, y, w, h) {
             let totalBrightness = 0;
@@ -900,7 +1093,7 @@
                 return;
             }
 
-            const position = document.getElementById('position').value;
+            const position = document.querySelector('.position-btn.active').dataset.position;
             const heightInput = document.getElementById('height').value;
             const opacity = parseFloat(document.getElementById('opacity').value) / 100;
             const enableRecolor = document.getElementById('enableRecolor').checked;
@@ -920,7 +1113,7 @@
 
                 try {
                     const result = await processImage(overlay, targetFile, position, heightInput, 
-                                                     opacity, enableRecolor, color, autoAdjust);
+                                                     opacity, enableRecolor, color, autoAdjust, topBottomPadding, leftRightPadding);
                     addPreview(result, targetFile.name);
                 } catch (error) {
                     console.error('Error processing image:', error);
@@ -931,7 +1124,7 @@
             document.getElementById('processBtn').disabled = false;
         }
 
-        async function processImage(overlay, targetFile, position, heightInput, opacity, enableRecolor, color, autoAdjust) {
+        async function processImage(overlay, targetFile, position, heightInput, opacity, enableRecolor, color, autoAdjust, topBottomPadding = 0, leftRightPadding = 0) {
             const base = await loadImage(targetFile);
             
             const canvas = document.createElement('canvas');
@@ -958,20 +1151,35 @@
                 newWidth = Math.floor(newHeight * aspectRatio);
             }
 
-            // Calculate position
+            // Calculate position with padding
             let x, y;
             switch (position) {
                 case 'top_left':
-                    x = 0; y = 0;
+                    x = leftRightPadding; y = topBottomPadding;
+                    break;
+                case 'top_center':
+                    x = (base.width - newWidth) / 2; y = topBottomPadding;
                     break;
                 case 'top_right':
-                    x = base.width - newWidth; y = 0;
+                    x = base.width - newWidth - leftRightPadding; y = topBottomPadding;
+                    break;
+                case 'middle_left':
+                    x = leftRightPadding; y = (base.height - newHeight) / 2;
+                    break;
+                case 'center':
+                    x = (base.width - newWidth) / 2; y = (base.height - newHeight) / 2;
+                    break;
+                case 'middle_right':
+                    x = base.width - newWidth - leftRightPadding; y = (base.height - newHeight) / 2;
                     break;
                 case 'bottom_left':
-                    x = 0; y = base.height - newHeight;
+                    x = leftRightPadding; y = base.height - newHeight - topBottomPadding;
+                    break;
+                case 'bottom_center':
+                    x = (base.width - newWidth) / 2; y = base.height - newHeight - topBottomPadding;
                     break;
                 default: // bottom_right
-                    x = base.width - newWidth; y = base.height - newHeight;
+                    x = base.width - newWidth - leftRightPadding; y = base.height - newHeight - topBottomPadding;
             }
 
             // Create overlay canvas

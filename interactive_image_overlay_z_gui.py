@@ -572,7 +572,7 @@ def show_language_selection():
     header_frame.grid(row=0, column=0, sticky=(tk.W, tk.E))
     header_frame.grid_columnconfigure(0, weight=1)
     header_frame.grid_propagate(False)
-    
+
     # Title with icon
     title_frame = tk.Frame(header_frame, bg='#4a90e2')
     title_frame.pack(expand=True)

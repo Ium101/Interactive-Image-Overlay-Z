@@ -1,6 +1,5 @@
 # -*- mode: python ; coding: utf-8 -*-
 
-
 a = Analysis(
     ['interactive_image_overlay_z_gui.py'],
     pathex=[],

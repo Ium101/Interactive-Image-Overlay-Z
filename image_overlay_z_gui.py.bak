@@ -12,7 +12,7 @@ import numpy as np
 
 LANGUAGES = {
     "en": {
-        "title": "Image Overlay",
+        "title": "Image Overlay Z",
         "select_overlay": "Select the overlay image (with transparent background)",
         "select_targets": "Select the target images to apply the overlay",
         "success": "Overlay applied successfully to all images!",
@@ -27,7 +27,7 @@ LANGUAGES = {
         "no": "No"
     },
     "pt": {
-        "title": "Sobreposição de Imagem",
+        "title": "Sobreposição de Imagem Z ",
         "select_overlay": "Selecione a imagem de sobreposição (com fundo transparente)",
         "select_targets": "Selecione as imagens alvo para aplicar a sobreposição",
         "success": "Sobreposição aplicada com sucesso a todas as imagens!",
