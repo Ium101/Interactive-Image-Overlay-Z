@@ -102,6 +102,8 @@ class InteractiveOverlayApp:
         self.current_index = 0
         self.output_folder = None
         self.settings = {}
+        self.skipped_images = set()  # Track skipped image indices
+        self.has_applied_any = False  # Track if any image was explicitly applied
         
         self.overlay_original = None
         self.base_original = None
@@ -285,6 +287,8 @@ class InteractiveOverlayApp:
         self.target_paths = list(paths)
         self.current_index = 0
         self.settings = {}
+        self.skipped_images = set()  # Reset skipped images when loading new set
+        self.has_applied_any = False  # Reset apply flag when loading new set
         self.load_current_image()
         
     def analyze_brightness(self, image, bbox):
@@ -506,6 +510,9 @@ class InteractiveOverlayApp:
     def apply_current(self):
         if not self.target_paths:
             return
+        
+        # Mark that we have explicitly applied at least one image
+        self.has_applied_any = True
             
         # Save settings for current image
         self.settings[self.current_index] = {
@@ -528,6 +535,9 @@ class InteractiveOverlayApp:
     def skip_current(self):
         if not self.target_paths:
             return
+        
+        # Mark current image as skipped
+        self.skipped_images.add(self.current_index)
             
         if self.current_index < len(self.target_paths) - 1:
             self.current_index += 1
@@ -550,21 +560,42 @@ class InteractiveOverlayApp:
             messagebox.showwarning(self.L["title"], self.L["no_images"])
             return
             
-        if not self.settings:
-            messagebox.showwarning(self.L["title"], "No images configured! Use 'Apply' to configure images.")
+        if not self.overlay_original:
+            messagebox.showwarning(self.L["title"], self.L["no_watermark"])
             return
             
         output_folder = filedialog.askdirectory(title=self.L["select_output"])
         if not output_folder:
             return
+        
+        # Get current UI settings
+        current_settings = {
+            'position': self.position_var.get(),
+            'size': self.size_var.get(),
+            'opacity': self.opacity_var.get(),
+            'top_bottom_padding': self.top_bottom_padding_var.get(),
+            'left_right_padding': self.left_right_padding_var.get(),
+            'color_mode': self.color_mode.get(),
+            'color': self.selected_color if self.color_mode.get() == "custom" else None
+        }
             
-        # Process each image
+        # Process each image with current settings
         processed_count = 0
         for idx, target_path in enumerate(self.target_paths):
-            if idx not in self.settings:
-                continue  # Skip images without settings
-                
-            s = self.settings[idx]
+            # Skip images that were marked as skipped
+            if idx in self.skipped_images:
+                continue
+            
+            # If any image was explicitly applied, only process those that were applied
+            # Otherwise (no apply clicked yet), apply current settings to all non-skipped images
+            if self.has_applied_any and idx not in self.settings:
+                continue
+            
+            # Use settings from explicitly applied image, or use current UI settings
+            if idx in self.settings:
+                s = self.settings[idx]
+            else:
+                s = current_settings
             
             try:
                 # Load images
