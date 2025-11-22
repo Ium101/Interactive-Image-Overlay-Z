@@ -58,33 +58,44 @@ Next, another file dialog will open. Here, you can select one or more images tha
 After selecting your images, you will be prompted to choose a folder where the new, processed images will be saved.
 
 #### Step 5: Configure Options
-A series of dialog boxes will appear, allowing you to customize how the overlay is applied:
-1.  **Auto-recolor for contrast:** You will be asked if you want to automatically adjust the overlay's tone based on the background. **Answering "Yes" is highly recommended.**
-2.  **Overlay Size:** Enter a value to set the overlay's height. You can use pixels (e.g., `150`) or a percentage of the target image's height (e.g., `10%`). Leave it blank to use a default size.
-3.  **Opacity:** Enter a percentage from 0 to 100 to set the transparency. `100` is fully opaque, while `50` is semi-transparent.
-4.  **Position:** Enter where you want the overlay to be placed. Options are: `top left`, `top right`, `bottom left`, or `bottom right`.
+A graphical interface will appear with real-time preview. You can:
+1.  **Choose Position:** Select from 9 positions (corners, edges, and center) using buttons in a 3×3 grid.
+2.  **Set Size:** Use a slider to adjust the overlay size as a percentage of the image height.
+3.  **Set Opacity:** Use a slider to control transparency (0-100%).
+4.  **Set Padding:** Adjust top/bottom and left/right padding (in pixels) for precise positioning.
+5.  **Auto-adjust Tone:** Enable/disable automatic tone adjustment based on the background brightness.
+6.  **Choose Color Mode:** Select between original color, auto-tone, or custom color.
+
+You have two workflows:
+- **Quick Mode:** Skip the "Apply" step and go straight to "Process All Images" to apply the current settings to all selected images at once.
+- **Detailed Mode:** Click "Apply to This Image" for each image to customize them individually, then click "Process All Images" to process only the images you applied settings to.
+
+You can also skip specific images by clicking "Skip This Image" - they won't be processed.
 
 #### Step 6: Processing
-Once all options are set, a progress window will appear, showing the status as each image is processed. When the process is complete, a success message will be displayed, and the application will close. Your new images will be in the output folder you selected.
+Click "Process All Images" to begin. A success message will show how many images were processed. Your new images will be in the output folder you selected.
 
 ### 4. Explanation of Options
 
 #### Auto-Recolor for Contrast
-This is the application's most powerful feature. When enabled, it analyzes the area behind the overlay on each image.
+This is the application's most powerful feature. When enabled, it analyzes the area behind the overlay on each image and automatically adjusts the tone:
 -   If the area is **dark**, the overlay is automatically made **lighter**.
 -   If the area is **light**, the overlay is automatically made **darker**.
 This ensures your overlay is always easy to see.
 
-#### Overlay Size
-You can define the size in two ways:
--   **Pixels (e.g., `150`):** Sets a fixed height in pixels.
--   **Percentage (e.g., `10%`):** Makes the overlay's height a percentage of the target image's height. This is great for maintaining a consistent relative size across images of different dimensions.
+#### Position
+You can place the overlay in 9 different positions: all four corners, the four edges (top, bottom, left, right centers), and the center of the image.
+
+#### Size
+The overlay size is set as a percentage of the target image's height. For example, `10%` means the overlay will be 10% of the image's height. This maintains consistent sizing across images of different dimensions.
 
 #### Opacity
-This controls how transparent the overlay is. A value of `100` (or `100%`) means it's fully visible, while lower values make it more subtle.
+Controls how transparent the overlay is. A value of `100` means it's fully visible, while `50` is semi-transparent.
 
-#### Position
-You can place the overlay in any of the four corners of the image. If you enter an invalid option or leave it blank, it will default to the bottom right.
+#### Padding
+Allows you to fine-tune the position by adding extra space from the edges:
+-   **Top/Bottom Padding:** Distance from top or bottom edge.
+-   **Left/Right Padding:** Distance from left or right edge.
 
 ### 5. Troubleshooting
 
@@ -150,33 +161,44 @@ Em seguida, outra janela de seleção de arquivo será aberta. Aqui, você pode 
 Após selecionar suas imagens, você será solicitado a escolher uma pasta onde as novas imagens processadas serão salvas.
 
 #### Passo 5: Configure as Opções
-Uma série de caixas de diálogo aparecerá, permitindo que você personalize como a sobreposição será aplicada:
-1.  **Ajuste de cor para contraste:** Será perguntado se você deseja ajustar automaticamente o tom da sobreposição com base no fundo. **Responder "Sim" é altamente recomendado.**
-2.  **Tamanho da Sobreposição:** Digite um valor para definir a altura da sobreposição. Você pode usar pixels (ex: `150`) ou uma porcentagem da altura da imagem de destino (ex: `10%`). Deixe em branco para usar um tamanho padrão.
-3.  **Opacidade:** Digite uma porcentagem de 0 a 100 para definir a transparência. `100` é totalmente opaco, enquanto `50` é semitransparente.
-4.  **Posição:** Digite onde você deseja que a sobreposição seja posicionada. As opções são: `superior esquerdo`, `superior direito`, `inferior esquerdo` ou `inferior direito`.
+Uma interface gráfica aparecerá com visualização em tempo real. Você pode:
+1.  **Escolher Posição:** Selecione entre 9 posições (cantos, bordas e centro) usando botões em uma grade 3×3.
+2.  **Definir Tamanho:** Use um controle deslizante para ajustar o tamanho da sobreposição como uma porcentagem da altura da imagem.
+3.  **Definir Opacidade:** Use um controle deslizante para controlar a transparência (0-100%).
+4.  **Definir Preenchimento:** Ajuste o preenchimento superior/inferior e esquerdo/direito (em pixels) para posicionamento preciso.
+5.  **Ajustar Tom Automaticamente:** Ativar/desativar o ajuste automático de tom com base no brilho do fundo.
+6.  **Escolher Modo de Cor:** Selecione entre cor original, tom automático ou cor personalizada.
+
+Você tem dois fluxos de trabalho:
+- **Modo Rápido:** Pule a etapa "Aplicar" e vá direto para "Processar Todas as Imagens" para aplicar as configurações atuais a todas as imagens selecionadas de uma só vez.
+- **Modo Detalhado:** Clique em "Aplicar a Esta Imagem" para cada imagem a fim de personalizá-las individualmente, então clique em "Processar Todas as Imagens" para processar apenas as imagens às quais você aplicou as configurações.
+
+Você também pode pular imagens específicas clicando em "Pular Esta Imagem" - elas não serão processadas.
 
 #### Passo 6: Processamento
-Assim que todas as opções forem definidas, uma janela de progresso aparecerá, mostrando o status enquanto cada imagem é processada. Quando o processo for concluído, uma mensagem de sucesso será exibida, e a aplicação será fechada. Suas novas imagens estarão na pasta de saída que você selecionou.
+Clique em "Processar Todas as Imagens" para começar. Uma mensagem de sucesso mostrará quantas imagens foram processadas. Suas novas imagens estarão na pasta de saída que você selecionou.
 
 ### 4. Explicação das Opções
 
 #### Ajuste de Cor Automático para Contraste
-Esta é a funcionalidade mais poderosa da aplicação. Quando ativada, ela analisa a área atrás da sobreposição em cada imagem.
+Esta é a funcionalidade mais poderosa da aplicação. Quando ativada, ela analisa a área atrás da sobreposição em cada imagem e ajusta automaticamente o tom:
 -   Se a área for **escura**, a sobreposição é automaticamente tornada mais **clara**.
 -   Se a área for **clara**, a sobreposição é automaticamente tornada mais **escura**.
 Isso garante que sua sobreposição seja sempre fácil de ver.
 
-#### Tamanho da Sobreposição
-Você pode definir o tamanho de duas maneiras:
--   **Pixels (ex: `150`):** Define uma altura fixa em pixels.
--   **Porcentagem (ex: `10%`):** Torna a altura da sobreposição uma porcentagem da altura da imagem de destino. Isso é ótimo para manter um tamanho relativo consistente em imagens de diferentes dimensões.
+#### Posição
+Você pode posicionar a sobreposição em 9 posições diferentes: todos os quatro cantos, as quatro bordas (centros superior, inferior, esquerdo e direito) e o centro da imagem.
+
+#### Tamanho
+O tamanho da sobreposição é definido como uma porcentagem da altura da imagem de destino. Por exemplo, `10%` significa que a sobreposição será 10% da altura da imagem. Isso mantém o dimensionamento consistente em imagens de diferentes dimensões.
 
 #### Opacidade
-Isso controla o quão transparente a sobreposição é. Um valor de `100` (ou `100%`) significa que ela está totalmente visível, enquanto valores mais baixos a tornam mais sutil.
+Controla o quão transparente a sobreposição é. Um valor de `100` significa que está totalmente visível, enquanto `50` é semitransparente.
 
-#### Posição
-Você pode posicionar a sobreposição em qualquer um dos quatro cantos da imagem. Se você digitar uma opção inválida ou deixar em branco, o padrão será o canto inferior direito.
+#### Preenchimento
+Permite que você ajuste melhor a posição adicionando espaço extra nas bordas:
+-   **Preenchimento Superior/Inferior:** Distância da borda superior ou inferior.
+-   **Preenchimento Esquerdo/Direito:** Distância da borda esquerda ou direita.
 
 ### 5. Solução de Problemas
 

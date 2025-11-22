@@ -27,13 +27,14 @@ A user-friendly graphical application that adds an image overlay over multiple i
 
 -   **Intuitive Graphical Interface (GUI):** No command line needed. An easy-to-use interface guides you through the process.
 -   **Intelligent Auto-Recolor:** Automatically analyzes the background of each image and adjusts the overlay to be dark on light areas and light on dark areas, ensuring maximum visibility.
--   **Batch Processing:** Apply an overlay to hundreds of images in a single operation.
+-   **Batch Processing:** Apply an overlay to hundreds of images in a single operation. Skip images you don't want to process, and apply settings intelligently - either to all images at once or to individually configured ones.
 -   **Fully Customizable:**
-    -   Adjust the overlay **size** (in pixels or percentage).
-    -   Choose the exact **position** (top-left, bottom-right, center, etc.).
-    -   Set the padding to the left/right or top/bottom.
+    -   Adjust the overlay **size** (as percentage of image height).
+    -   Choose the exact **position** (9 positions: corners, edges, and center).
+    -   Set **padding** to the left/right or top/bottom for precise positioning.
     -   Set the **opacity** level for a more subtle effect.
--   **Multiple Format Support:** Works with `PNG`, `JPG/JPEG`, and `BMP` files.
+    -   Auto-adjust tone for visibility on any background.
+-   **Multiple Format Support:** Works with `PNG`, `JPG/JPEG`, `GIF`, and `BMP` files.
 
 ### 🚀 How to Run
 
